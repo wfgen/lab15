@@ -2,19 +2,14 @@ version: "3.9"
 
 services:
   nginx:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx
+    image: wfgen/nginx:${{ matrix.architecture }}
     ports:
       - 8888:8888
     networks:
       - backend
 
   php:
-    build:
-      context: .
-      dockerfile: Dockerfile.php
-    image: php:8.2-fpm
+    image: wfgen/php:${{ matrix.architecture }}
     depends_on:
       - mysql
     networks:
@@ -25,16 +20,14 @@ services:
   mysql:
     environment:
       - MYSQL_ROOT_PASSWORD=lab11
-    image: mysql:latest
+    image: wfgen/mysql:${{ matrix.architecture }}
     ports:
       - 3307:3306
     networks:
       - backend
 
   phpmyadmin:
-    build:
-      context: .
-      dockerfile: Dockerfile.phpmyadmin
+    image: wfgen/phpmyadmin:${{ matrix.architecture }}
     ports:
       - 6001:80
     networks:
