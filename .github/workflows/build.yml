@@ -1,0 +1,37 @@
+name: Build and Push Images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: [amd64, arm64]
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Build and Push Nginx Image
+        run: |
+          docker build -t wfgen/nginx:${{ matrix.architecture }} -f Dockerfile.nginx .
+          docker push wfgen/nginx:${{ matrix.architecture }}
+
+      - name: Build and Push PHP Image
+        run: |
+          docker build -t wfgen/php:${{ matrix.architecture }} -f Dockerfile.php .
+          docker push wfgen/php:${{ matrix.architecture }}
+
+      - name: Build and Push MySQL Image
+        run: |
+          docker build -t wfgen/mysql:${{ matrix.architecture }} -f Dockerfile.mysql .
+          docker push wfgen/mysql:${{ matrix.architecture }}
+
+      - name: Build and Push phpMyAdmin Image
+        run: |
+          docker build -t wfgen/phpmyadmin:${{ matrix.architecture }} -f Dockerfile.phpmyadmin .
+          docker push wfgen/phpmyadmin:${{ matrix.architecture }}
