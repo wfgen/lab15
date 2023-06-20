@@ -2,14 +2,14 @@ version: "3.9"
 
 services:
   nginx:
-    image: wfgen/nginx:${{ matrix.architecture }}
+    image: lab11-nginx:${{ matrix.architecture }}
     ports:
       - 8888:8888
     networks:
       - backend
 
   php:
-    image: wfgen/php:${{ matrix.architecture }}
+    image: lab11-php:${{ matrix.architecture }}
     depends_on:
       - mysql
     networks:
@@ -20,14 +20,14 @@ services:
   mysql:
     environment:
       - MYSQL_ROOT_PASSWORD=lab11
-    image: wfgen/mysql:${{ matrix.architecture }}
+    image: lab11-mysql:${{ matrix.architecture }}
     ports:
       - 3307:3306
     networks:
       - backend
 
   phpmyadmin:
-    image: wfgen/phpmyadmin:${{ matrix.architecture }}
+    image: lab11-phpmyadmin:${{ matrix.architecture }}
     ports:
       - 6001:80
     networks:
