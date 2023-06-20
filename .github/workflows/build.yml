@@ -19,6 +19,7 @@ jobs:
       - name: Build and Push Nginx Image
         run: |
           docker build -t wfgen/nginx:${{ matrix.architecture }} -f Dockerfile.nginx .
+          docker login -u your-docker-username -p ${{ secrets.DOCKERHUB_TOKEN }}
           docker push wfgen/nginx:${{ matrix.architecture }}
 
       - name: Build and Push PHP Image
