@@ -19,34 +19,25 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username wfgen --password-stdin
+
       - name: Build and Push Nginx Image
-        env:
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           docker buildx build -t wfgen/nginx:${{ matrix.architecture }} -f Dockerfile.nginx --platform linux/${{ matrix.architecture }} .
-          docker login --username wfgen --password $DOCKERHUB_TOKEN
           docker push wfgen/nginx:${{ matrix.architecture }}
 
       - name: Build and Push PHP Image
-        env:
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           docker buildx build -t wfgen/php:${{ matrix.architecture }} -f Dockerfile.php --platform linux/${{ matrix.architecture }} .
-          docker login --username wfgen --password $DOCKERHUB_TOKEN
           docker push wfgen/php:${{ matrix.architecture }}
 
       - name: Build and Push MySQL Image
-        env:
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           docker buildx build -t wfgen/mysql:${{ matrix.architecture }} -f Dockerfile.mysql --platform linux/${{ matrix.architecture }} .
-          docker login --username wfgen --password $DOCKERHUB_TOKEN
           docker push wfgen/mysql:${{ matrix.architecture }}
 
       - name: Build and Push phpMyAdmin Image
-        env:
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           docker buildx build -t wfgen/phpmyadmin:${{ matrix.architecture }} -f Dockerfile.phpmyadmin --platform linux/${{ matrix.architecture }} .
-          docker login --username wfgen --password $DOCKERHUB_TOKEN
           docker push wfgen/phpmyadmin:${{ matrix.architecture }}
